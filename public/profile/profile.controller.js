@@ -9,7 +9,7 @@
       $scope.reload = function(){
          meanData.getProfile()
             .success(function(data) {
-               data.profileImage = 'http://graphicdesignjunction.com/wp-content/uploads/2012/08/cute-baby-photo-37.jpg';
+               data.profileImage = 'https://previews.123rf.com/images/triken/triken1608/triken160800028/61320729-Male-avatar-profile-picture-Default-user-avatar-guest-avatar-Simply-human-head-Vector-illustration-i-Stock-Vector.jpg';
                $scope.user = data;
                console.log('Profile Controller: ' + data.email+ 'account id'+data.accountID);
             })
@@ -18,7 +18,7 @@
             });
          $scope.closeAlert();
       };
-
+      var geocoder = new google.maps.Geocoder();
 
       // get all transaction history
       $scope.transactionHistory;
@@ -65,7 +65,8 @@
                console.log('Error: ' + data);
             });
       };
-      $scope.updateUser = function () {
+      //update user profile
+      $scope.updateUser1 = function () {
          $http.post('/api/profile/updateUser', $scope.user)
             .success(function(data){
                console.log(JSON.stringify(data));
@@ -96,5 +97,28 @@
       } else {
          $scope.reload();
       }
-   }
+
+      $scope.updateUser= function() {
+         
+        var address = $scope.user.address+" "+$scope.user.city+' '+$scope.user.state+" "+$scope.user.zipcode;
+        console.log("address is "+ address);
+        geocoder.geocode({'address': address}, function(results, status) {
+          if (status === 'OK') {
+     /*       resultsMap.setCenter(results[0].geometry.location);
+            var marker = new google.maps.Marker({
+              map: resultsMap,
+              position: results[0].geometry.location
+            }); */
+            $scope.user.lat = results[0].geometry.location.lat();
+            $scope.user.lng = results[0].geometry.location.lng();
+            console.log(" lat long: "+ $scope.user.lat+" | "+$scope.user.lng+ "result "+results[0].geometry.location);
+            $scope.updateUser1();
+            $scope.editMessage = "Profile Updated Successful!";
+            document.getElementById('editAlert').classList.add("alert-success");
+          } else {
+            console.log('Geocode was not successful for the following reason: ' + status );      
+          }
+        });
+      }// end convert geocoder address
+   } // profile ctrl
 })();

@@ -6,7 +6,9 @@ module.exports.add = function(req, res){
 	console.log("inside adding to transaction: "+ req.body.accountId + " "+req.body.amount);
 	var trans = {
     		accountId: req.body.accountId,
-    		amount: req.body.amount
+    		amount: req.body.amount,
+            deliveryTime: req.body.deliveryTime,
+            deliveryDistance: req.body.deliveryDistance
     	};
 	// query to insert item to shopping cart
     dbConnection.get().query('INSERT INTO transaction SET ?',[trans],function(err, outResult){
@@ -30,15 +32,17 @@ module.exports.add = function(req, res){
                             console.log("test inside insert to transactionfact table");
                         });// end query insert item to transaction fact
                 }// end for loop
+                
+                // delete from shopping cart  after making payment
+                dbConnection.get().query("DELETE FROM shoppingcart WHERE accountId = ? ",[req.body.accountId],function(err, result){
+                    if (err) throw err;
+                });    
+                //end delete from shopping cart
             
             });
             // end insert into transaction face table
 
-            // delete from shopping cart  after making payment
-            dbConnection.get().query("DELETE FROM shoppingcart WHERE accountId = ? ",[req.body.accountId],function(err, result){
-                if (err) throw err;
-            });    
-            //end delete from shopping cart
+            
 
     		res.status(200);
     		res.json({

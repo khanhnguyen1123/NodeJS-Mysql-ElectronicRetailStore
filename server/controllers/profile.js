@@ -39,7 +39,7 @@ module.exports.profileRead = function(req, res) {
 
 module.exports.updateUser = function(req, res) {
   var userId = req.body.accountID;
-  console.log("inside update user with accountID is "+userId);
+  console.log("inside update user with accountID is "+userId +"lat lng: "+req.body.lat);
   dbConnection.get().query("SELECT * FROM user WHERE accountID = ? ",[req.body.accountID], function(err, rows){
       if (err){
           console.log('error form query dbConnection');
@@ -56,8 +56,8 @@ module.exports.updateUser = function(req, res) {
     	  });
       }
       if (rows.length == 1){
-      	  dbConnection.get().query("UPDATE user SET userName=?, email=?, address=?, city=?, state=?, zipcode=? WHERE accountID = ? ",
-      	  	[req.body.userName, req.body.email, req.body.address, req.body.city, req.body.state, req.body.zipcode, req.body.accountID], function(err, insideRows){
+      	  dbConnection.get().query("UPDATE user SET userName=?, email=?, address=?, city=?, state=?, zipcode=?, lat=?, lng=? WHERE accountID = ? ",
+      	  	[req.body.userName, req.body.email, req.body.address, req.body.city, req.body.state, req.body.zipcode, req.body.lat, req.body.lng, req.body.accountID], function(err, insideRows){
       	  		if (err){
 		          console.log('error form query dbConnection');
 		          res.status(401).json({

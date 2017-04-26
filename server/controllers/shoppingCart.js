@@ -10,7 +10,9 @@ module.exports.add = function(req, res){
     		quantity: req.body.quantity,
     		price: req.body.price,
     		name: req.body.name,
-    		image: req.body.image
+    		image: req.body.image,
+    		deliveryDistance: req.body.deliveryDistance,
+    		deliveryTime: req.body.deliveryTime
     	};
 	// query to insert item to shopping cart
     dbConnection.get().query('INSERT INTO shoppingcart SET ?',[item],function(err, result){

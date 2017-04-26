@@ -16,12 +16,16 @@
     else{
       return;
     }  
-
+    var distance, time;
     // get all items in shopping cart
     $http.post('/api/shoppingCart/get',authentication.currentUser())
       .success(function(data){
         console.log(JSON.stringify(data));
         $scope.shoppingCartItems = data;
+        if (data[0] != undefined){
+          distance = data[0].deliveryDistance;
+          time = data[0].deliveryTime;
+        }  
         // calculate total from items in shopping cart
         for(var i=0; i<Object.keys(data).length;i++){
           $scope.total += (data[i].price*data[i].quantity) ;
@@ -91,7 +95,9 @@
     $scope.transaction=function(){
       var trans = {
         accountId: authentication.currentUser()._id,
-        amount: $scope.total
+        amount: $scope.total,
+        deliveryDistance: distance,
+        deliveryTime: time
       };
 
       $http.post('/api/transaction/add',trans)
