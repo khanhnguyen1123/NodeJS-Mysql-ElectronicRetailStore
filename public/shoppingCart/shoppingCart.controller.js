@@ -8,6 +8,7 @@
    
     $scope.shoppingCartItems = {};
     $scope.total=0 ;
+    $scope.itemCost ={};
     // dont need to check for thic loggedin but just do it anyway for making sure
     if (authentication.isLoggedIn()){
        //user.accountId= authentication.currentUser()._id;
@@ -77,18 +78,33 @@
     
     //Redirects to Paypal Payment
     $scope.makePaypalPayment = function(){
-      /*
-      console.log("Paypal Payment Processing");
-      $http.post('/create', $scope.item)
-        .success(function(data){
-          console.log('Paypal Payment Success: '+JSON.stringify(data));   
-          $window.location.href=data.link;
-        })
-        .error(function(data) {
-          console.log('Paypal Payment Error: ' + data);
-        });
-      */
-      $scope.transaction();
+      
+      if ($scope.total> 0){
+        var confirm = $window.confirm("Confirm Your payment for "+$scope.total);
+       // $scope.itemCost.price = $scope.total;
+        $scope.itemCost={
+          accountId: authentication.currentUser()._id,
+          amount: $scope.total,
+          deliveryDistance: distance,
+          deliveryTime: time,
+          price : $scope.total
+        };
+        if (confirm) {
+          $http.post('/create', $scope.itemCost)
+            .success(function(data){
+         //     $scope.transaction();
+              console.log('khanh successfully inside make paypal payment scope '+JSON.stringify(data));   
+              $window.location.href = data.link;
+            })
+            .error(function(data) {
+              console.log('Error fail calling makePaypalPayment: ' + data);
+            });
+        }
+        
+      }
+      else
+        return;
+      
     };// end make paypal payment
 
     // transaction for cheking out items in shopping cart
@@ -104,7 +120,7 @@
       .success(function(data){
         console.log(JSON.stringify(data));
         
-        $window.alert("Payment Successfull !! Thank You For Your Purchase");
+        //$window.alert("Payment Successfull !! Thank You For Your Purchase");
     //    $location.path('profile');  // after payment redirect to profile page
       })// end success
       .error(function(error) {

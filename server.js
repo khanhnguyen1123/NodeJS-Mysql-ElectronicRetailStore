@@ -24,7 +24,7 @@ var profileController = require('./server/controllers/profile');
 var productController =  require('./server/controllers/product');
 var shoppingCartController =  require('./server/controllers/shoppingCart');
 var transactionController = require('./server/controllers/transaction');
-
+var paypalPayment = require('./server/controllers/paypalPayment');
 /* test connecting to mysql server successfully
 dbConnection.get().query('SELECT * from account', function(err, rows, fields) {
   if (!err){
@@ -62,6 +62,10 @@ app.post('/api/transaction/add',transactionController.add);
 app.post('/api/transaction/getTransactionFact',transactionController.getTransactionFact);
 app.post('/api/transaction/getTransactionFactDetail',transactionController.getTransactionFactDetail);
 
+// paypal payment 
+app.post('/create', paypalPayment.create);
+app.get('/execute', paypalPayment.execute);
+app.get('/cancel', paypalPayment.cancel);
 
 var port = process.env.PORT  || 5000;
 app.listen(port, function(){
