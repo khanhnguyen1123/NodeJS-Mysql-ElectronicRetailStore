@@ -122,6 +122,19 @@ var add = function(body){
                             if (err) throw err;
                             console.log("test inside insert to transactionfact table");
                         });// end query insert item to transaction fact
+                    // update product quantity
+                    dbConnection.get().query("UPDATE product SET quantity= quantity- ? WHERE productId = ? ",
+			      	  	[result[i].quantity,result[i].productId], function(err, insideRows){
+			      	  	  if (err){
+					          console.log('error form query dbConnection');
+					          
+					      }    
+					      else{
+						      	console.log("update product Successfully with new data ");
+						      	
+					      }
+			      	  
+			      	  })// end dbConnection query update user
                 }// end for loop
                 
                 // delete from shopping cart  after making payment
