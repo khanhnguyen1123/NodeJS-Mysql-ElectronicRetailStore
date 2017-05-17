@@ -51,7 +51,7 @@ app.post('/api/profile/updateUser',profileController.updateUser);
 // product 
 app.get('/api/product/getAll',productController.getAll);
 app.get('/api/product/getOne/:id',productController.getOne);
-
+app.get('/api/product/search/:key',productController.search);
 // shopping cart
 app.post('/api/shoppingCart/add', shoppingCartController.add);
 app.post('/api/shoppingCart/get',shoppingCartController.get);

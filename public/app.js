@@ -41,6 +41,11 @@
         templateUrl: 'public/shoppingCart/shoppingCart.view.html',
         controller: 'shoppingCartController'
       })
+      .state('search', {
+        url: '/search/:key',
+        templateUrl: 'public/search/search.view.html',
+        controller: 'searchController'
+      })
 
     // use the HTML5 History API
     //$locationProvider.html5Mode(true);
